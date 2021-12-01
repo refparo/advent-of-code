@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Rust Build Prepare",
+      "type": "shell",
+      "command": "./build_pre.sh '${relativeFile}'",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Rust Build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "type": "cargo",
+      "subcommand": "build",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$rustc"],
+      "dependsOn": ["Rust Build Prepare"]
+    },
+    {
+      "label": "Rust Run",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "type": "cargo",
+      "subcommand": "run",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$rustc"],
+      "dependsOn": ["Rust Build Prepare"]
+    }
+  ]
+}
