@@ -5,7 +5,7 @@
       "name": "Rust Debug",
       "type": "lldb",
       "request": "launch",
-      "program": "${workspaceFolder}/rust/target/debug/advent-of-code",
+      "program": "${workspaceFolder}/target/debug/advent-of-code",
       "args": [],
       "cwd": "${workspaceFolder}",
       "preLaunchTask": "Rust Build"
