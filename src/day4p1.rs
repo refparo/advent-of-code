@@ -1,4 +1,4 @@
-use super::day4::{input, mark};
+use super::day4::*;
 
 pub fn main() {
   let (numbers, mut boards) = input();
