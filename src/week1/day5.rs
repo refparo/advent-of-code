@@ -3,6 +3,7 @@ use std::io::{BufRead, BufReader};
 
 pub type Point = (u16, u16);
 pub type Line = (Point, Point);
+// ~1MB of memory; use HashMap<(u16, u16), u8> to exchange time for space
 pub type Map = [[u8; 1000]; 1000];
 
 #[inline]
