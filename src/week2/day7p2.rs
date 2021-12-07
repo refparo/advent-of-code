@@ -6,11 +6,10 @@ pub fn main() {
   let nums = BufReader::new(file).lines()
     .next().unwrap().unwrap()
     .split(',').map(|x| x.parse::<i32>().unwrap()).collect::<Vec<_>>();
-  let avg = (
-    (&nums).into_iter().sum::<i32>() as f64 /
-    nums.len() as f64 - 0.5
-  ).round() as i32;
+  // f(x) = sum((1 + abs(x - num)) * abs(x - num) / 2)
+  // minimum value at x = round(avg(num - 1/2)) = floor(avg(num))
+  let avg = (&nums).into_iter().sum::<i32>() / nums.len() as i32;
   println!("{}", nums.into_iter()
-    .map(|x| (avg - x).abs() * (1 + (avg - x).abs()) / 2)
+    .map(|num| (1 + (avg - num).abs()) * (avg - num).abs() / 2)
     .sum::<i32>());
 }
