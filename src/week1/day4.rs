@@ -31,10 +31,10 @@ pub fn mark(board: &mut Vec<Vec<Option<u8>>>, target: u8) -> Option<u32> {
     }
   }
   if let Some((i, j)) = pos {
-    if (&board[i]).into_iter().all(|num| num.is_none())
-      || board.into_iter().all(|l| l[j].is_none()) { Some(
-      board.into_iter()
-        .map(|l| l.into_iter()
+    if board[i].iter().all(|num| num.is_none())
+      || board.iter().all(|l| l[j].is_none()) { Some(
+      board.iter()
+        .map(|l| l.iter()
           .filter(|num| num.is_some())
           .map(|num| num.unwrap() as u32).sum::<u32>())
         .sum::<u32>() * target as u32

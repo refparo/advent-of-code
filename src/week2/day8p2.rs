@@ -9,9 +9,8 @@ trait FindRemove {
 impl<T> FindRemove for Vec<T> {
   type Item = T;
   fn find_remove<P>(&mut self, p: P) -> Option<Self::Item>
-    where Self: Sized, P: Fn(&Self::Item) -> bool {
-    let idx = self.into_iter().position(|x| p(x)).unwrap();
-    Some(self.swap_remove(idx))
+    where Self: Sized, P: FnMut(&Self::Item) -> bool {
+    Some(self.swap_remove(self.iter().position(p).unwrap()))
   }
 }
 
@@ -45,7 +44,7 @@ pub fn main() {
         mapping[1].chars().all(|c| s.find(c).is_some())).unwrap();
       mapping[6] = display.swap_remove(0);
       input.into_iter().skip(1)
-        .map(|s| (&mapping).into_iter().enumerate()
+        .map(|s| mapping.iter().enumerate()
           .find(|(_, t)| **t == s).unwrap().0)
         .reduce(|res, d| res * 10 + d).unwrap()
     })

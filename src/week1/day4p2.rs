@@ -11,7 +11,7 @@ pub fn main() {
         last_score = score;
       }
     }
-    if (&wins).into_iter().all(|x| *x) { break; }
+    if wins.iter().all(|x| *x) { break; }
   }
   println!("{}", last_score);
 }
