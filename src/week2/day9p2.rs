@@ -1,13 +1,19 @@
 use super::day9::*;
 
-fn flood_fill(map: &mut Vec<Vec<u32>>, (i, j): (usize, usize)) -> usize {
-  if map[i][j] >= 9 { return 0; }
-  map[i][j] = !map[i][j];
-  let mut res = 1;
-  if j > 0 { res += flood_fill(map, (i, j - 1)); }
-  if j < map[i].len() - 1 { res += flood_fill(map, (i, j + 1)); }
-  if i > 0 { res += flood_fill(map, (i - 1, j)); }
-  if i < map.len() - 1 { res += flood_fill(map, (i + 1, j)); }
+fn flood_fill(map: &mut Vec<Vec<u32>>, pos: (usize, usize)) -> usize {
+  use std::collections::VecDeque;
+  let mut cue = VecDeque::with_capacity(32);
+  cue.push_back(pos);
+  let mut res = 0;
+  while let Some((i, j)) = cue.pop_front() {
+    if map[i][j] >= 9 { continue; }
+    res += 1;
+    map[i][j] = !map[i][j];
+    if j > 0 { cue.push_back((i, j - 1)); }
+    if j < map[i].len() - 1 { cue.push_back((i, j + 1)); }
+    if i > 0 { cue.push_back((i - 1, j)); }
+    if i < map.len() - 1 { cue.push_back((i + 1, j)); }
+  }
   res
 }
 
