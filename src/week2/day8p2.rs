@@ -33,15 +33,15 @@ pub fn main() {
       let bd = mapping[4].chars()
         .filter(|c| mapping[1].find(*c).is_none())
         .collect::<String>();
-      mapping[3] = display.find_remove(|s| s.len() == 5 &&
-        mapping[1].chars().all(|c| s.find(c).is_some())).unwrap();
-      mapping[5] = display.find_remove(|s| s.len() == 5 &&
-        bd.chars().all(|c| s.find(c).is_some())).unwrap();
+      mapping[3] = display.find_remove(|s| s.len() == 5
+        && mapping[1].chars().all(|c| s.find(c).is_some())).unwrap();
+      mapping[5] = display.find_remove(|s| s.len() == 5
+        && bd.chars().all(|c| s.find(c).is_some())).unwrap();
       mapping[2] = display.find_remove(|s| s.len() == 5).unwrap();
-      mapping[0] = display.find_remove(|s| s.len() == 6 &&
-        !bd.chars().all(|c| s.find(c).is_some())).unwrap();
-      mapping[9] = display.find_remove(|s| s.len() == 6 &&
-        mapping[1].chars().all(|c| s.find(c).is_some())).unwrap();
+      mapping[0] = display.find_remove(|s| s.len() == 6
+        && !bd.chars().all(|c| s.find(c).is_some())).unwrap();
+      mapping[9] = display.find_remove(|s| s.len() == 6
+        && mapping[1].chars().all(|c| s.find(c).is_some())).unwrap();
       mapping[6] = display.swap_remove(0);
       input.into_iter().skip(1)
         .map(|s| mapping.iter().enumerate()

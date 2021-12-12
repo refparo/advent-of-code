@@ -15,10 +15,10 @@ pub fn low_points<'a>(map: &'a Vec<Vec<u32>>)
   map.iter().enumerate()
     .flat_map(move |(i, row)| {
       row.iter().enumerate()
-        .filter(move |(j, h)| (*j == 0 || row[*j - 1] > **h) &&
-          (*j == row.len() - 1 || row[*j + 1] > **h) &&
-          (i == 0 || map[i - 1][*j] > **h) &&
-          (i == map.len() - 1 || map[i + 1][*j] > **h))
+        .filter(move |(j, h)| (*j == 0 || row[*j - 1] > **h)
+          && (*j == row.len() - 1 || row[*j + 1] > **h)
+          && (i == 0 || map[i - 1][*j] > **h)
+          && (i == map.len() - 1 || map[i + 1][*j] > **h))
         .map(move |(j, _)| (i, j))
     })
 }

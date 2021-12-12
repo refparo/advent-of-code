@@ -33,8 +33,8 @@ pub fn search<'a, const hurry: bool>(graph: &'a Graph, path: &mut Vec<&'a str>)
   -> usize {
   let mut count = 0;
   let next_caves = graph[path[path.len() - 1]].iter()
-    .filter(|c| c.chars().next().unwrap().is_uppercase() ||
-      path.iter().all(|d| c != d))
+    .filter(|c| c.chars().next().unwrap().is_uppercase()
+      || path.iter().all(|d| c != d))
     .collect::<Vec<_>>();
   for next in next_caves {
     if next == "end" {
@@ -47,9 +47,9 @@ pub fn search<'a, const hurry: bool>(graph: &'a Graph, path: &mut Vec<&'a str>)
   }
   if !hurry {
     let next_caves = graph[path[path.len() - 1]].iter()
-      .filter(|c| c != &"start" &&
-        c.chars().next().unwrap().is_lowercase() &&
-        path.iter().any(|d| c == d))
+      .filter(|c| c != &"start"
+        && c.chars().next().unwrap().is_lowercase()
+        && path.iter().any(|d| c == d))
       .collect::<Vec<_>>();
     for next in next_caves {
       path.push(next);
