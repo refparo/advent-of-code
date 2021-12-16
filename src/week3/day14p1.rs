@@ -1,4 +1,4 @@
-/// A naive solution, but complex enough to be preserved.
+// A naive solution, but complex enough to be preserved.
 
 use std::mem::swap;
 
