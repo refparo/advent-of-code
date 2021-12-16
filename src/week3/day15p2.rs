@@ -42,7 +42,7 @@ fn risk(orig: u32, k: usize, m: usize) -> u32 {
 
 fn dijkstra(map: &Map, width: usize) -> u32 {
   let neighbors = neighbors(width);
-  let mut dist_map = vec![[[(false, u32::max_value()); 5]; 5]; map.len()];
+  let mut dist_map = vec![[[(false, u32::MAX); 5]; 5]; map.len()];
   dist_map[0][0][0] = (false, 0);
   let mut frontline = HashSet::<(usize, usize, usize, usize)>::with_capacity(100);
   frontline.insert((0, 0, 0, 0));

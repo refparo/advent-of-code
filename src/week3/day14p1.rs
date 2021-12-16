@@ -17,7 +17,7 @@ fn insert(template: &Polymer, rules: &Rules, output: &mut Polymer) {
 }
 
 fn count_most_common<T: PartialEq, const least: bool>(xs: &[T]) -> usize {
-  let mut count = if least { usize::max_value() } else { 0 };
+  let mut count = if least { usize::MAX } else { 0 };
   let mut temp = 1;
   for pair in xs.windows(2) {
     if pair[0] == pair[1] {

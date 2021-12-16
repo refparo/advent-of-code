@@ -1,3 +1,4 @@
+use std::ops::{BitOrAssign, ShlAssign};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -33,12 +34,13 @@ pub use Packet::*;
 
 impl Packet {
   pub fn from(bits: &[bool]) -> Packet {
-    fn number<'a, I: Iterator<Item = &'a bool>>(bits: &mut I, len: usize)
-      -> u8 {
-      let mut res = 0;
+    fn number<'a, T, I>(bits: &mut I, len: usize) -> T
+      where T: ShlAssign + BitOrAssign + From<bool>,
+            I: Iterator<Item = &'a bool> {
+      let mut res = T::from(false);
       for _ in 0..len {
-        res <<= 1;
-        if *bits.next().unwrap() { res |= 1; }
+        res <<= T::from(true);
+        if *bits.next().unwrap() { res |= T::from(true); }
       }
       res
     }
@@ -48,21 +50,19 @@ impl Packet {
       let typeid = number(bits, 3);
       let mut packlen = 6;
       if typeid == 4 {
-        let mut value = 0u128;
+        let mut value = 0;
         while let Some(true) = bits.next() {
           value <<= 4;
-          value |= number(bits, 4) as u128;
+          value |= number::<u128, _>(bits, 4);
           packlen += 5;
         }
         value <<= 4;
-        value |= number(bits, 4) as u128;
+        value |= number::<u128, _>(bits, 4);
         packlen += 5;
         (Lit { version, value }, packlen)
       } else {
         if let Some(true) = bits.next() {
-          let subnum = ((number(bits, 3) as u16) << 8)
-            | ((number(bits, 4) as u16) << 4)
-            | number(bits, 4) as u16;
+          let subnum = number::<u16, _>(bits, 11);
           packlen += 12;
           let subpackets = (0..subnum).map(|_| {
             let (packet, len) = packet(bits);
@@ -71,10 +71,7 @@ impl Packet {
           }).collect();
           (Op { version, typeid, subpackets }, packlen)
         } else {
-          let mut sublen = ((number(bits, 3) as usize) << 12)
-            | ((number(bits, 4) as usize) << 8)
-            | ((number(bits, 4) as usize) << 4)
-            | number(bits, 4) as usize;
+          let mut sublen = number::<usize, _>(bits, 15);
           packlen += 16 + sublen;
           let mut subpackets = Vec::with_capacity(4);
           while sublen > 0 {

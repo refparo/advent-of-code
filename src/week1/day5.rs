@@ -30,18 +30,18 @@ pub fn input() -> Vec<Line> {
 pub fn draw(((x1, y1), (x2, y2)): Line, map: &mut Map) {
   if y1 == y2 {
     let (x1, x2) = sort(x1 as usize, x2 as usize);
-    for j in x1..x2 + 1 { map[y1 as usize][j] += 1; }
+    for j in x1..=x2 { map[y1 as usize][j] += 1; }
   } else if x1 == x2 {
     let (y1, y2) = sort(y1 as usize, y2 as usize);
-    for i in y1..y2 + 1 { map[i][x1 as usize] += 1; }
+    for i in y1..=y2 { map[i][x1 as usize] += 1; }
   } else if (x1 < x2) == (y1 < y2) {
     let ((x, y), (xend, _)) =
       sort((x1 as usize, y1 as usize), (x2 as usize, y2 as usize));
-    for i in 0..xend - x + 1 { map[y + i][x + i] += 1; }
+    for i in 0..=xend - x { map[y + i][x + i] += 1; }
   } else {
     let ((y, x), (yend, _)) =
       sort((y1 as usize, x1 as usize), (y2 as usize, x2 as usize));
-    for i in 0..yend - y + 1 { map[y + i][x - i] += 1; }
+    for i in 0..=yend - y { map[y + i][x - i] += 1; }
   }
 }
 

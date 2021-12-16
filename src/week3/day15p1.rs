@@ -8,7 +8,7 @@ fn search(map: &Map, dist_map: &mut DistMap, width: usize,
   (i, j): (usize, usize)) -> u32 {
   let pos = i * width + j;
   if dist_map[pos] > 0 { return dist_map[pos]; }
-  let mut min = u32::max_value();
+  let mut min = u32::MAX;
   if i < width - 1 {
     min = min.min(search(map, dist_map, width, (i + 1, j)));
   }
