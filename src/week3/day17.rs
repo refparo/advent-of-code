@@ -18,5 +18,5 @@ pub fn test((left, right, bottom, top): (i16, i16, i16, i16),
       return false;
     }
   }
-  panic!();
+  unreachable!();
 }
