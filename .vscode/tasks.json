@@ -16,12 +16,11 @@
         "kind": "build",
         "isDefault": true
       },
-      "type": "cargo",
-      "subcommand": "build",
+      "type": "shell",
+      "command": "cargo build",
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": ["$rustc"],
       "dependsOn": ["Rust Build Prepare"]
     },
     {
@@ -30,12 +29,11 @@
         "kind": "test",
         "isDefault": true
       },
-      "type": "cargo",
-      "subcommand": "run",
+      "type": "shell",
+      "command": "cargo run",
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": ["$rustc"],
       "dependsOn": ["Rust Build Prepare"]
     }
   ]

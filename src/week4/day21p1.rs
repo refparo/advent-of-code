@@ -10,7 +10,7 @@ use super::day21::*;
 // => dice(n) = (16 - n % 10) % 10
 
 pub fn main() {
-  let (mut p1, mut p2) = input();
+  let (mut p1, mut p2) = input;
   let (mut s1, mut s2) = (0, 0);
   let mut dice = 0;
   loop {

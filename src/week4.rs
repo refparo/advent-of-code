@@ -9,3 +9,7 @@ pub mod day21p2;
 mod day22;
 pub mod day22p1;
 pub mod day22p2;
+
+mod day23;
+pub mod day23p1;
+pub mod day23p2;

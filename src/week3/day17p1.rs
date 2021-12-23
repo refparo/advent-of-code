@@ -21,7 +21,7 @@ use super::day17::*;
 // so, y_max = (w + 1) * w / 2 = bottom * (bottom + 1) / 2
 
 pub fn main() {
-  let area@(left, _, bottom, _) = input();
+  let area@(left, _, bottom, _) = input;
   let v = ((2.0 * left as f64 - 0.25).sqrt() - 0.5).ceil() as i16;
   let w = -bottom - 1;
   assert!(test(area, (v, w)));

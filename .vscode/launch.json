@@ -5,6 +5,7 @@
       "name": "Rust Debug",
       "type": "lldb",
       "request": "launch",
+      "sourceLanguages": ["rust"],
       "program": "${workspaceFolder}/target/debug/advent-of-code",
       "args": [],
       "cwd": "${workspaceFolder}",

@@ -53,7 +53,7 @@ fn step(state: State) -> State {
 }
 
 pub fn main() {
-  let (p1, p2) = input();
+  let (p1, p2) = input;
   let mut state = State::from([(Gaming(p1, 0, p2, 0), 1)]);
   state = step(state);
   while state.len() > 2 { state = step(state); }

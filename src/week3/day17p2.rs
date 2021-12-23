@@ -19,7 +19,7 @@ use super::day17::*;
 // so we can just brute-force
 
 pub fn main() {
-  let area@(left, right, bottom, _) = input();
+  let area@(left, right, bottom, _) = input;
   let v_max = right;
   let v_min = ((2.0 * left as f64 - 0.25).sqrt() - 0.5).ceil() as i16;
   let w_max = -bottom - 1;
