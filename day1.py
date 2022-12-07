@@ -1,6 +1,6 @@
 def max_calorie(input: str):
   calories = [
-    sum([int(line) for line in group.splitlines()])
+    sum(int(line) for line in group.splitlines())
     for group in input.strip().split('\n\n')
   ]
   return max(calories), sum(sorted(calories, reverse=True)[:3])

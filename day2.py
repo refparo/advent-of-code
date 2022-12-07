@@ -18,8 +18,8 @@ def solve(input: str):
     for line in input.strip().splitlines()
   ]
   print(
-    sum([score1(*instr) for instr in instructions]),
-    sum([score2(*instr) for instr in instructions])
+    sum(score1(*instr) for instr in instructions),
+    sum(score2(*instr) for instr in instructions)
   )
 
 solve("""

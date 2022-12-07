@@ -31,14 +31,14 @@ def solve(stacks_in: str, instr_in: str):
     Instr(*[int(x) for x in line.split()[1::2]])
     for line in instr_in.strip().splitlines()
   ]
-  print(*[
-    ''.join([
+  print(*(
+    ''.join(
       stack[-1] for stack in rerrange([
         stack.copy() for stack in stacks
       ], instr)
-    ])
+    )
     for rerrange in [rearrange1, rearrange2]
-  ])
+  ))
 
 solve("""
     [D]    
