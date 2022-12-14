@@ -51,18 +51,19 @@ class Packet():
 
 def solve(input: str):
   sum = 0
-  packets = [Packet.parse("[[2]]"), Packet.parse("[[6]]")]
+  two = Packet.parse("[[2]]")
+  six = Packet.parse("[[6]]")
+  i2, i6 = 1, 2
   for i, pair in enumerate(input.strip().split("\n\n"), start=1):
     [lhs, rhs] = pair.splitlines()
-    packets.append(Packet.parse(lhs))
-    packets.append(Packet.parse(rhs))
-    if packets[-2] < packets[-1]: sum += i
-  # None return value of __lt__ should be naturally considered False
-  # Also the input is probably guaranteed to be totally ordered
-  packets.sort() # type: ignore
-  key = (packets.index(Packet.parse("[[2]]")) + 1) \
-    * (packets.index(Packet.parse("[[6]]")) + 1)
-  print(sum, key)
+    lhs, rhs = Packet.parse(lhs), Packet.parse(rhs)
+    if lhs < rhs: sum += i
+    for packet in lhs, rhs:
+      if packet < six:
+        i6 += 1
+        if packet < two:
+          i2 += 1
+  print(sum, i2 * i6)
 
 solve("""
 [1,1,3,1,1]
