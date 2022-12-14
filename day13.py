@@ -55,8 +55,7 @@ def solve(input: str):
   six = Packet.parse("[[6]]")
   i2, i6 = 1, 2
   for i, pair in enumerate(input.strip().split("\n\n"), start=1):
-    [lhs, rhs] = pair.splitlines()
-    lhs, rhs = Packet.parse(lhs), Packet.parse(rhs)
+    lhs, rhs = (Packet.parse(line) for line in pair.splitlines())
     if lhs < rhs: sum += i
     for packet in lhs, rhs:
       if packet < six:
