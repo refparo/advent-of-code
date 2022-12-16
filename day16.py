@@ -34,28 +34,6 @@ def filter_graph(graph: dict[str, tuple[int, list[str]]]):
   rates = list(graph[keys[i]][0] for i in filtered)
   return rates, dist
 
-"""
-max = 0
-for next in nexts:
-  nexttime: float = time + dist[pos, next] + 1
-  if nexttime >= TIMELIMIT: continue
-  release = (TIMELIMIT - nexttime) * rates[next]
-  release += go(total + release, next, nexttime, nexts - {next}, elephant)
-  if release > max: max = release
-if max == 0:
-  key = f"{dest - nexts}"
-  mem.setdefault(key, total)
-if elephant:
-  key = f"{nexts}"
-  release = mem.get(key)
-  if release == None:
-    release = go(0, 0, 0, nexts, False)
-    print(key, "=>", release)
-    mem[key] = release
-  if release > max: max = release
-return max
-"""
-
 def search(rates: list[int], dist: NDArray[np.float64], elephant: bool):
   TIMELIMIT = 26 if elephant else 30
   # len(passed) -> list[(pos, time, total, passed, dest)]
@@ -75,11 +53,15 @@ def search(rates: list[int], dist: NDArray[np.float64], elephant: bool):
   if not elephant:
     return max(value[2] for l in mem for value in l)
   else:
+    # here we may first filter out the max total of each different dest set
+    # or we can filter them out in the first step (that would be a bit complex)
+    # but I'm too lazy to do that
+    # after all, 2.5s is already blazingly fast
     maxlen = len(rates) - 1
     return max(
       total1 + total2
       for i in reversed(range(maxlen // 2, len(mem)))
-      for j in range(0, min(i, maxlen - i) + 1)
+      for j in range(len(mem) // 2, min(i, maxlen - i) + 1)
       for _, _, total1, _, dest1 in mem[i]
       for _, _, total2, passed2, _ in mem[j]
       if dest1.issuperset(passed2)
