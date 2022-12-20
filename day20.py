@@ -22,7 +22,7 @@ def mix(arr: list[int], idxmap: dict[tuple[int, int], int]):
     idxmap[i, x] = dest
 
 def decrypt(arr: list[int], repeat: int):
-  idxmap = dict(((i, x), i) for i, x in enumerate(arr))
+  idxmap = {(i, x): i for i, x in enumerate(arr)}
   for _ in range(repeat): mix(arr, idxmap)
   i0 = idxmap[arr.index(0), 0]
   target = {(i0 + i) % len(arr) for i in [1000, 2000, 3000]}

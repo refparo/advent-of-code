@@ -14,7 +14,7 @@ def parse(input: str):
 
 def floyd_warshall(graph: dict[str, tuple[int, list[str]]]):
   keys = list(graph.keys())
-  invkeys = dict((key, i) for i, key in enumerate(keys))
+  invkeys = {key: i for i, key in enumerate(keys)}
   dist = np.full((len(keys), len(keys)), np.inf)
   for i in range(len(keys)): dist[i, i] = 0
   for i, room in enumerate(keys):
