@@ -1,4 +1,4 @@
-from queue import SimpleQueue
+from collections import deque
 
 def sides(x: int, y: int, z: int):
   yield (x + 1, y, z)
@@ -25,10 +25,9 @@ def solve(input: str):
   xmin, ymin, zmin = (min(p[i] for p in droplet) - 1 for i in range(3))
   xmax, ymax, zmax = (max(p[i] for p in droplet) + 1 for i in range(3))
   steam: set[tuple[int, int, int]] = set()
-  water: SimpleQueue[tuple[int, int, int]] = SimpleQueue()
-  water.put_nowait((xmin, ymin, zmin))
-  while not water.empty():
-    (x, y, z) = water.get_nowait()
+  water: deque[tuple[int, int, int]] = deque([(xmin, ymin, zmin)])
+  while not len(water) == 0:
+    (x, y, z) = water.popleft()
     if (x, y, z) in steam: continue
     steam.add((x, y, z))
     for (x, y, z) in sides(x, y, z):
@@ -39,7 +38,7 @@ def solve(input: str):
         (x, y, z) not in steam and
         (x, y, z) not in droplet
       ):
-        water.put_nowait((x, y, z))
+        water.append((x, y, z))
   steam_surface = surface(steam)
   xlen, ylen, zlen = xmax - xmin + 1, ymax - ymin + 1, zmax - zmin + 1
   steam_outer = 2 * (xlen * ylen + ylen * zlen + zlen * xlen)
