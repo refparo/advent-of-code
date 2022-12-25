@@ -19,7 +19,7 @@ def solve(input: str):
     xmin, ymin = min(x for (x, _) in elves), min(y for (_, y) in elves)
     xmax, ymax = max(x for (x, _) in elves), max(y for (_, y) in elves)
     return (xmax - xmin + 1) * (ymax - ymin + 1) - len(elves)
-  for round in count():
+  for round in count(1):
     for (x, y) in elves:
       if elves.isdisjoint((x + dx, y + dy) for (dx, dy) in surrounding):
         proposal[(x, y)] = [(x, y)]
@@ -50,10 +50,10 @@ def solve(input: str):
       else:
         for elf in proponents:
           elves.add(elf)
-    if round == 9:
+    if round == 10:
       print(area(), end=" ")
     if nobody_move:
-      print(round + 1)
+      print(round)
       break
     proposal.clear()
     directions.rotate(-1)
