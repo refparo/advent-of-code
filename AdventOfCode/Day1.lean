@@ -4,7 +4,7 @@ namespace Day1
 
 open Std (HashMap)
 
-def processInput (input : String) :=
+def parseInput (input : String) :=
   input.splitOn "\n"
   |> List.map (
     match ·.splitOn with
@@ -14,24 +14,23 @@ def processInput (input : String) :=
   |> List.unzip
 
 def solvePart1 : List Int × List Int -> Nat
-  | (left, right) =>
-    List.zip left.mergeSort right.mergeSort
-    |> List.map (
-      match · with
-      | (left, right) => Int.natAbs $ right - left
-    )
-    |> Nat.sum
+| (left, right) =>
+  List.zip left.mergeSort right.mergeSort
+  |> List.map (
+    fun (left, right) => Int.natAbs $ right - left
+  )
+  |> Nat.sum
 
 def solvePart2 : List Int × List Int -> Nat
-  | (left, right) => Id.run do
-    let mut dict := HashMap.empty
-    for x in right do
-      dict := dict.insert x (1 + dict[x]?.getD 0)
-    Nat.sum $ left.map (fun x =>
-      x * dict[x]?.getD 0 |> Int.toNat
-    )
+| (left, right) => Id.run do
+  let mut dict := HashMap.empty
+  for x in right do
+    dict := dict.insert x (1 + dict[x]?.getD 0)
+  Nat.sum $ left.map (fun x =>
+    x * dict[x]?.getD 0 |> Int.toNat
+  )
 
-def input := processInput "\
+def input := parseInput "\
 38665   13337
 84587   21418
 93374   50722
