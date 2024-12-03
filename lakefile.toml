@@ -1,4 +1,4 @@
-name = "advent-of-code"
+name = "AdventOfCode"
 version = "0.1.0"
 
 [[lean_lib]]

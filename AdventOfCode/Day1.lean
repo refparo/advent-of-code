@@ -19,16 +19,15 @@ def solvePart1 : List Int × List Int -> Nat
   |> List.map (
     fun (left, right) => Int.natAbs $ right - left
   )
-  |> Nat.sum
+  |>.sum
 
 def solvePart2 : List Int × List Int -> Nat
 | (left, right) => Id.run do
   let mut dict := HashMap.empty
   for x in right do
     dict := dict.insert x (1 + dict[x]?.getD 0)
-  Nat.sum $ left.map (fun x =>
+  return List.sum $ left.map fun x =>
     x * dict[x]?.getD 0 |> Int.toNat
-  )
 
 def input := parseInput "\
 38665   13337
