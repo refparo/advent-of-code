@@ -1,3 +1,5 @@
+import AdventOfCode.Utils
+
 namespace Day2
 
 def parseInput (input : String) :=
@@ -6,7 +8,7 @@ def parseInput (input : String) :=
 
 def checkDiff (diff : List Int) :=
   (diff.all (· > 0) || diff.all (· < 0)) &&
-  diff.all (·.natAbs |> fun x => x >= 1 && x <= 3)
+  diff.all (·.natAbs |> dup (· >= 1 && · <= 3))
 
 def solvePart1 (input : List (List Nat)) :=
   input.countP fun report =>

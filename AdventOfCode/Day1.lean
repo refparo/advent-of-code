@@ -1,5 +1,7 @@
 import Std.Data.HashMap
 
+import AdventOfCode.Utils
+
 namespace Day1
 
 open Std (HashMap)
@@ -13,16 +15,14 @@ def parseInput (input : String) :=
   )
   |> List.unzip
 
-def solvePart1 : List Int × List Int -> Nat
-| (left, right) =>
+def solvePart1 (left right : List Int) :=
   List.zip left.mergeSort right.mergeSort
   |> List.map (
     fun (left, right) => Int.natAbs $ right - left
   )
   |>.sum
 
-def solvePart2 : List Int × List Int -> Nat
-| (left, right) => Id.run do
+def solvePart2 (left right : List Int) := Id.run do
   let mut dict := HashMap.empty
   for x in right do
     dict := dict.insert x (1 + dict[x]?.getD 0)
@@ -1031,6 +1031,6 @@ def input := parseInput "\
 79209   60704
 39667   36867"
 
-#eval solvePart1 input
+#eval uncurry solvePart1 input
 
-#eval solvePart2 input
+#eval uncurry solvePart2 input
