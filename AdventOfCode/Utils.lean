@@ -19,15 +19,30 @@ end Nat
 
 namespace Std
 
+  instance : Membership Nat Range where
+    mem r i := r.start <= i && i < r.stop && (i - r.start) % r.step == 0
+
   instance (i : Nat) (r : Range) : Decidable (i ∈ r) := by
     unfold Membership.mem
-    unfold instMembershipNatRange
+    unfold instMembershipNatRange_adventOfCode
     infer_instance
 
   example : 0 ∈ [:1] := by decide
+  example : ¬ 1 ∈ [:1] := by decide
+
   example : 0 ∈ [0:1] := by decide
-  example : 0 ∈ [0:1:1] := by decide
+  example : ¬ 1 ∈ [0:1] := by decide
+
   example : 0 ∈ [:1:1] := by decide
+  example : ¬ 1 ∈ [:1:1] := by decide
+
+  example : 0 ∈ [0:1:1] := by decide
+  example : ¬ 1 ∈ [0:1:1] := by decide
+
+  example : 0 ∈ [0:3:2] := by decide
+  example : ¬ 1 ∈ [0:3:2] := by decide
+  example : 2 ∈ [0:3:2] := by decide
+  example : ¬ 3 ∈ [0:3:2] := by decide
 
 end Std
 
@@ -38,7 +53,7 @@ namespace StreamRange
     step : Nat := 1
 
   instance : Membership Nat StreamRange where
-    mem r i := if r.start + r.step >= r.start then r.start <= i else r.start >= i
+    mem r i := r.start <= i && (i - r.start) % r.step == 0
 
   instance (i : Nat) (r : StreamRange) : Decidable (i ∈ r) := by
     unfold Membership.mem
@@ -76,9 +91,12 @@ namespace StreamRange
   | `([ $start :: $step ]) => `({ start := $start, step := $step : StreamRange })
 
   example : 0 ∈ [:] := by decide
-  example : 0 ∈ [::1] := by decide
   example : 0 ∈ [0:] := by decide
+  example : 0 ∈ [::1] := by decide
   example : 0 ∈ [0::1] := by decide
+
+  example : 0 ∈ [0::2] := by decide
+  example : ¬ 1 ∈ [0::2] := by decide
 
   instance : Stream StreamRange Nat where
     next? range := (range.start, { range with start := range.start + range.step })
