@@ -1,3 +1,5 @@
+import AdventOfCode.Utils
+
 namespace Day4
 
 def parseInput (input : String) :=
@@ -11,9 +13,9 @@ def test
 := Id.run do
   let (i, j) := begin
   let (di, dj) := direction
-  for char in target.toSubstring, k in [:target.length] do
-    if input[i + di * k |>.natAbs]!.get
-      (String.Pos.mk $ Int.natAbs $ j + dj * k) != char
+  for char in target.toSubstring, k in [:] do
+    if input[i.addInt $ di * k]!.get
+      (String.Pos.mk $ j.addInt $ dj * k) != char
     then return false
   return true
 
@@ -25,12 +27,12 @@ def solvePart1 (input : Array Substring) := Id.run do
     ( 1, -1), ( 1, 0), ( 1, 1),
   ] : List (Int × Int)) do
     for i in [
-      max (di * -3) 0 |>.natAbs :
-      height + min (di * -3) 0 |>.natAbs
+      (0).maxInt (di * -3) :
+      height.addInt $ min (di * -3) 0
     ] do
       for j in [
-        max (dj * -3) 0 |>.natAbs :
-        width + min (dj * -3) 0 |>.natAbs
+        (0).maxInt (dj * -3) :
+        width.addInt $  min (dj * -3) 0
       ] do
         if test input "XMAS" (i, j) (di, dj)
         then result := result + 1

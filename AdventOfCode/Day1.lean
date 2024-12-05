@@ -10,24 +10,24 @@ def parseInput (input : String) :=
   input.splitOn "\n"
   |> List.map (
     match ·.splitOn with
-    | [left, _, _, right] => (left.toInt!, right.toInt!)
+    | [left, _, _, right] => (left.toNat!, right.toNat!)
     | _ => panic "invalid input"
   )
   |> List.unzip
 
-def solvePart1 (left right : List Int) :=
+def solvePart1 (left right : List Nat) :=
   List.zip left.mergeSort right.mergeSort
   |> List.map (
-    fun (left, right) => Int.natAbs $ right - left
+    uncurry (Int.natAbs $ ·.diff ·)
   )
   |>.sum
 
-def solvePart2 (left right : List Int) := Id.run do
+def solvePart2 (left right : List Nat) := Id.run do
   let mut dict := HashMap.empty
   for x in right do
     dict := dict.insert x (1 + dict[x]?.getD 0)
   return List.sum $ left.map fun x =>
-    x * dict[x]?.getD 0 |> Int.toNat
+    x * dict[x]?.getD 0
 
 def input := parseInput "\
 38665   13337
