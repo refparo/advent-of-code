@@ -9,13 +9,13 @@ def test
   (input : Array Substring)
   (target : String)
   (begin : Nat × Nat)
-  (direction : Int × Int)
+  (direction : Offset × Offset)
 := Id.run do
   let (i, j) := begin
   let (di, dj) := direction
   for char in target.toSubstring, k in [:] do
-    if input[i.addInt $ di * k]!.get
-      (String.Pos.mk $ j.addInt $ dj * k) != char
+    if input[i + di * k]!.get
+      (String.Pos.mk $ j + dj * k) != char
     then return false
   return true
 
@@ -25,14 +25,14 @@ def solvePart1 (input : Array Substring) := Id.run do
     (-1, -1), (-1, 0), (-1, 1),
     ( 0, -1),          ( 0, 1),
     ( 1, -1), ( 1, 0), ( 1, 1),
-  ] : List (Int × Int)) do
+  ] : List (Offset × Offset)) do
     for i in [
-      (0).maxInt (di * -3) :
-      height.addInt $ min (di * -3) 0
+      (di * -3).maxNat 0 :
+      height + min (di * -3) (0 : Offset)
     ] do
       for j in [
-        (0).maxInt (dj * -3) :
-        width.addInt $  min (dj * -3) 0
+        (dj * -3).maxNat 0 :
+        width + min (dj * -3) (0 : Offset)
       ] do
         if test input "XMAS" (i, j) (di, dj)
         then result := result + 1

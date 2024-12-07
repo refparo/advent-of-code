@@ -2,20 +2,89 @@ export Function (curry uncurry)
 
 def dup (f : α -> α -> β) (x : α) := f x x
 
+section Offset
+
+  @[unbox]
+  structure Offset where
+    ofInt ::
+    toInt : Int
+  deriving
+    BEq, DecidableEq, Hashable, Inhabited,
+    Nonempty, Ord, TypeName
+
+  instance : Repr Offset where
+    reprPrec a prec := reprPrec a.toInt prec
+
+  instance : ToString Offset where
+    toString a := toString a.toInt
+
+  instance (n : Nat) : OfNat Offset n where
+    ofNat := Offset.ofInt $ Int.ofNat n
+
+  instance : Neg Offset where
+    neg a := Offset.ofInt $ -a.toInt
+
+  instance : HAdd Offset Offset Offset where
+    hAdd a b := Offset.ofInt $ a.toInt + b.toInt
+
+  instance : HSub Offset Offset Offset where
+    hSub a b := Offset.ofInt $ a.toInt - b.toInt
+
+  instance : HMul Offset Int Offset where
+    hMul a b := Offset.ofInt $ a.toInt * b
+
+  instance : HMul Offset Nat Offset where
+    hMul a b := Offset.ofInt $ a.toInt * b
+
+  instance : HDiv Offset Int Offset where
+    hDiv a b := Offset.ofInt $ a.toInt / b
+
+  instance : HDiv Offset Nat Offset where
+    hDiv a b := Offset.ofInt $ a.toInt / b
+
+  instance : HMod Offset Int Offset where
+    hMod a b := Offset.ofInt $ a.toInt % b
+
+  instance : HMod Offset Nat Offset where
+    hMod a b := Offset.ofInt $ a.toInt % b
+
+  instance : HAdd Nat Offset Nat where
+    hAdd a b := match b.toInt with
+      | .ofNat b => a + b
+      | .negSucc b => a - b.succ
+
+  instance : HSub Nat Offset Nat where
+    hSub a b := match b.toInt with
+      | .ofNat b => a - b
+      | .negSucc b => a + b.succ
+
+  instance : Max Offset where
+    max a b := Offset.ofInt $ max a.toInt b.toInt
+
+  instance : Min Offset where
+    min a b := Offset.ofInt $ min a.toInt b.toInt
+
+  namespace Offset
+
+    def natAbs (a : Offset) := a.toInt.natAbs
+
+    def maxNat (a : Nat) (b : Offset) :=
+      match b.toInt with
+      | .ofNat b => max a b
+      | .negSucc _ => a
+
+  end Offset
+
+end Offset
+
 namespace Nat
 
-  def addInt (lhs : Nat) : Int -> Nat
-  | .ofNat rhs => lhs + rhs
-  | .negSucc rhs => lhs - rhs.succ
-
-  def maxInt (lhs : Nat) : Int -> Nat
-  | .ofNat rhs => max lhs rhs
-  | .negSucc _ => lhs
-
-  def diff (lhs rhs : Nat) :=
-    Int.ofNat lhs - Int.ofNat rhs
+  def offset (a b : Nat) :=
+    Offset.mk $ Int.ofNat a - Int.ofNat b
 
 end Nat
+
+export Nat (offset)
 
 namespace Std
 

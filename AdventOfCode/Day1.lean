@@ -18,7 +18,7 @@ def parseInput (input : String) :=
 def solvePart1 (left right : List Nat) :=
   List.zip left.mergeSort right.mergeSort
   |> List.map (
-    uncurry (Int.natAbs $ ·.diff ·)
+    uncurry (·.offset · |>.natAbs)
   )
   |>.sum
 
