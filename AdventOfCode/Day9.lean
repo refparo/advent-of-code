@@ -18,10 +18,12 @@ def parseInput (input : String) := Id.run do
     isFile := !isFile
   (files, spaces.reverse)
 
-partial def compact
+def compact
   (compacted : Array (Nat × Nat × Nat) := Array.empty)
   (files spaces : Array (Nat × Nat))
 :=
+  if _ : files.size = 0 then compacted else
+  if _ : spaces.size = 0 then compacted else
   let (fileStart, fileStop) := files.back!
   let fileLength := fileStop - fileStart
   let (spaceStart, spaceStop) := spaces.back!
@@ -34,19 +36,36 @@ partial def compact
       spaceStart,
       spaceStart + min fileLength spaceLength
     )
-    let files := if fileLength <= spaceLength
+    let files' := if fileLength <= spaceLength
       then files.pop
       else files.pop.push (fileStart, fileStop - spaceLength)
-    let spaces := if fileLength >= spaceLength
+    let spaces' := if fileLength >= spaceLength
       then spaces.pop
       else spaces.pop.push (spaceStart + fileLength, spaceStop)
-    compact compacted files spaces
+    have : files'.size + spaces'.size < files.size + spaces.size := by
+      unfold files' spaces'
+      split
+      case' _ | _ => split
+      case isFalse.isFalse h h' =>
+        simp at h h'
+        have _ := Nat.lt_asymm h'
+        contradiction
+      case _ | _ | _ =>
+        simp
+        try rewrite [Nat.sub_one_add_one]
+        try simp
+        try apply Nat.add_lt_add
+        case _ | _ =>
+          try apply Nat.sub_one_lt
+          trivial
+    compact compacted files' spaces'
+termination_by files.size + spaces.size
 
 def compact2
   (compacted : Array (Nat × Nat × Nat) := Array.empty)
   (files spaces : Array (Nat × Nat))
 : Array (Nat × Nat × Nat) :=
-  if filesEmpty : files.size = 0 then compacted else
+  if _ : files.size = 0 then compacted else
   if spaces.size = 0 then compacted else
   let (fileStart, fileStop) := files.back!
   let fileLength := fileStop - fileStart
@@ -60,8 +79,7 @@ def compact2
   let rec loop (i : Nat) :=
     have : files.size - 1 < files.size := by
       apply Nat.sub_one_lt
-      rewrite [ne_eq]
-      exact filesEmpty
+      trivial
     let (spaceStart, spaceStop) := spaces[i]!
     let spaceLength := spaceStop - spaceStart
     if fileStop <= spaceStart then
@@ -92,6 +110,7 @@ def input := parseInput "6622774926702567136274121691173983817579825713877722862
 
 #eval uncurry compact input |> checksum
 -- #eval uncurry compact2 input |> checksum
+-- crashes the language server
 
 end Day9
 
