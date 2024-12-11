@@ -8,6 +8,10 @@ name = "AdventOfCode"
 name = "«segfault»"
 root = "AdventOfCode.Segfault"
 
+[[lean_exe]]
+name = "«day9»"
+root = "AdventOfCode.Day9"
+
 [[require]]
 name = "Parser"
 scope = "fgdorais"
