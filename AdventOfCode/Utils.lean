@@ -77,10 +77,42 @@ section Offset
 
 end Offset
 
+section Prod
+
+  instance [HAdd α1 β1 γ1] [HAdd α2 β2 γ2]
+  : HAdd (α1 × α2) (β1 × β2) (γ1 × γ2) where
+    hAdd := fun (a1, a2) (b1, b2) => (a1 + b1, a2 + b2)
+
+  instance [HSub α1 β1 γ1] [HSub α2 β2 γ2]
+  : HSub (α1 × α2) (β1 × β2) (γ1 × γ2) where
+    hSub := fun (a1, a2) (b1, b2) => (a1 - b1, a2 - b2)
+
+  instance [HAdd α1 β γ1] [HAdd α2 β γ2]
+  : HAdd (α1 × α2) β (γ1 × γ2) where
+    hAdd := fun (a1, a2) b => (a1 + b, a2 + b)
+
+  instance [HSub α1 β γ1] [HSub α2 β γ2]
+  : HSub (α1 × α2) β (γ1 × γ2) where
+    hSub := fun (a1, a2) b => (a1 - b, a2 - b)
+
+  instance [Membership α1 γ1] [Membership α2 γ2]
+  : Membership (α1 × α2) (γ1 × γ2) where
+    mem | (xs, ys), (x, y) => x ∈ xs /\ y ∈ ys
+
+  instance [Membership α1 γ1] [Membership α2 γ2]
+    (pair : α1 × α2) (coll : γ1 × γ2)
+    [Decidable (pair.fst ∈ coll.fst)]
+    [Decidable (pair.snd ∈ coll.snd)]
+  : Decidable (pair ∈ coll) := by
+    simp only [Membership.mem]
+    infer_instance
+
+end Prod
+
 namespace Nat
 
   def offset (a b : Nat) :=
-    Offset.mk $ Int.ofNat a - Int.ofNat b
+    Offset.ofInt $ Int.ofNat a - Int.ofNat b
 
 end Nat
 
@@ -88,12 +120,14 @@ export Nat (offset)
 
 namespace Std
 
+  instance : ToString Range where
+    toString r := s!"[{r.start}:{r.stop}:{r.step}]"
+
   instance : Membership Nat Range where
     mem r i := r.start <= i && i < r.stop && (i - r.start) % r.step == 0
 
   instance (i : Nat) (r : Range) : Decidable (i ∈ r) := by
-    unfold Membership.mem
-    unfold instMembershipNatRange_adventOfCode
+    simp only [Membership.mem]
     infer_instance
 
   example : 0 ∈ [:1] := by decide
@@ -113,6 +147,18 @@ namespace Std
   example : 2 ∈ [0:3:2] := by decide
   example : ¬ 3 ∈ [0:3:2] := by decide
 
+  instance : HAdd Range Nat Range where
+    hAdd r d := { r with start := r.start + d, stop := r.stop + d }
+
+  instance : HAdd Range Offset Range where
+    hAdd r d := { r with start := r.start + d, stop := r.stop + d }
+
+  instance : HSub Range Nat Range where
+    hSub r d := { r with start := r.start - d, stop := r.stop - d }
+
+  instance : HSub Range Offset Range where
+    hSub r d := { r with start := r.start - d, stop := r.stop - d }
+
 end Std
 
 namespace StreamRange
@@ -120,15 +166,18 @@ namespace StreamRange
   structure StreamRange where
     start : Nat := 0
     step : Nat := 1
+  deriving
+    BEq, DecidableEq, Hashable, Inhabited,
+    Nonempty, Repr, TypeName
 
   instance : Membership Nat StreamRange where
     mem r i := r.start <= i && (i - r.start) % r.step == 0
 
   instance (i : Nat) (r : StreamRange) : Decidable (i ∈ r) := by
-    unfold Membership.mem
-    unfold instMembershipNatStreamRange
+    simp only [Membership.mem]
     infer_instance
 
+  @[inline]
   instance : ForIn m StreamRange Nat where
     forIn x b f := do
       let mut i := x.start
@@ -174,3 +223,49 @@ namespace StreamRange
     toStream range := range
 
 end StreamRange
+
+section Matrix
+
+  structure Matrix (α) where
+    array : Array α
+    width : Nat
+  deriving
+    BEq, DecidableEq, Hashable, Inhabited, Nonempty, Repr
+
+  instance [Inhabited α] [ToString α] : ToString (Matrix α) where
+    toString mat := Id.run do
+      let mut str := "["
+      str := appendRow str (mat.array.toSubarray 0 mat.width)
+      for start in [mat.width : mat.array.size : mat.width] do
+        str := str ++ "\n "
+        str := appendRow str (mat.array.toSubarray start (start + mat.width))
+      str ++ "]"
+    where appendRow (str : String) (row : Subarray α) := Id.run do
+      let mut str := str
+      str := str ++ toString row[0]!
+      for elem in row.popFront do
+        str := str ++ " " ++ toString elem
+      str
+
+  instance : GetElem (Matrix α) (Nat × Nat) α
+    (fun mat (i, j) => i * mat.width + j < mat.array.size)
+  where
+    getElem
+    | mat, (i, j), h => mat.array.get ⟨i * mat.width + j, h⟩
+
+  instance : GetElem? (Matrix α) (Nat × Nat) α
+    (fun mat (i, j) => i * mat.width + j < mat.array.size)
+  where
+    getElem?
+    | mat, (i, j) => mat.array.get? (i * mat.width + j)
+    getElem!
+    | mat, (i, j) => mat.array.get! (i * mat.width + j)
+
+  namespace Matrix
+    def height (mat : Matrix α) := mat.array.size / mat.width
+
+    def set! [Inhabited α] (mat : Matrix α) : Nat × Nat -> α -> Matrix α
+    | (i, j), x => Matrix.mk (mat.array.set! (i * mat.width + j) x) mat.width
+  end Matrix
+
+end Matrix

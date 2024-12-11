@@ -4,6 +4,10 @@ version = "0.1.0"
 [[lean_lib]]
 name = "AdventOfCode"
 
+[[lean_exe]]
+name = "«segfault»"
+root = "AdventOfCode.Segfault"
+
 [[require]]
 name = "Parser"
 scope = "fgdorais"
