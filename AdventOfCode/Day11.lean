@@ -17,13 +17,20 @@ def blink : Nat -> List Nat
     [l.asString.toNat!, r.asString.toNat!]
   else [x * 2024]
 
-def blinkAll : List Nat -> List Nat
-| []      => []
-| x :: xs => blink x ++ blinkAll xs
-
 def solvePart1 (stones : List Nat) (n : Nat := 25) :=
   n.repeat (·.flatMap blink) stones
+
+def blinkCounts (counts : HashMap Nat Nat) := Id.run do
+  let mut result := HashMap.empty
+  for (x, n) in counts do
+    for y in blink x do
+      result := result.insert y $ result[y]?.getD 0 + n
+  result
+
+def solvePart2 (stones : List Nat) (n : Nat := 75) : HashMap Nat Nat :=
+  n.repeat blinkCounts $ HashMap.ofList $ stones.map (Prod.mk · 1)
 
 def input := parseInput "5688 62084 2 3248809 179 79 0 172169"
 
 #eval solvePart1 input 25 |>.length
+#eval solvePart2 input 75 |>.values.sum
