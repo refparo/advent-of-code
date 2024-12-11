@@ -59,13 +59,13 @@ def parseInput (input : String) := Id.run do
 def solvePart1 (mat : Matrix Tile) (guard : Nat × Nat) := Id.run do
   let mut mat := mat
   let borders := ([:mat.height], [:mat.width]) + 1
-  let mut pos := guard + (1 : Nat)
+  let mut pos := guard + 1n
   let mut dir : Offset × Offset := (-1, 0)
   let mut step := 0
   while pos ∈ borders do
-    match mat[pos - (1 : Nat)]! with
+    match mat[pos - 1n]! with
     | space =>
-      mat := mat.set! (pos - (1 : Nat)) $ path step
+      mat := mat.set! (pos - 1n) $ path step
       step := step + 1
     | obstruction =>
       pos := pos - dir

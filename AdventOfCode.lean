@@ -4,5 +4,6 @@ import AdventOfCode.Day3
 import AdventOfCode.Day4
 import AdventOfCode.Day5
 import AdventOfCode.Day6
+import AdventOfCode.Day10
 import AdventOfCode.Day11
 import AdventOfCode.Utils

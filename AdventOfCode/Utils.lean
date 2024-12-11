@@ -264,8 +264,20 @@ section Matrix
   namespace Matrix
     def height (mat : Matrix α) := mat.array.size / mat.width
 
+    def bounds (mat : Matrix α) := ([:mat.height], [:mat.width])
+
     def set! [Inhabited α] (mat : Matrix α) : Nat × Nat -> α -> Matrix α
     | (i, j), x => Matrix.mk (mat.array.set! (i * mat.width + j) x) mat.width
   end Matrix
 
 end Matrix
+
+syntax num &"n" : term
+syntax num &"i" : term
+syntax num &"o" : term
+syntax num &"u" : term
+macro_rules
+| `($n:num n) => `(($n : Nat))
+| `($n:num i) => `(($n : Int))
+| `($n:num o) => `(($n : Offset))
+| `($n:num u) => `(($n : USize))
