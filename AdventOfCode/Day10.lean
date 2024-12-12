@@ -4,23 +4,12 @@ namespace Day10
 
 open Std (Queue)
 
-def parseInput (input : String) := Id.run do
-  let mut mat := Array.empty
-  let mut width := Option.none
-  let mut trailHeads := #[]
-  let mut (i, j) := (0, 0)
-  for c in input.toSubstring do
-    match c with
-    | '\n' =>
-      width := .some j
-      i := i + 1
-      j := 0
-    | c =>
-      let h := Char.toUInt8 c - Char.toUInt8 '0'
-      if h == 0 then trailHeads := trailHeads.push (i, j)
-      mat := mat.push h
-      j := j + 1
-  (Matrix.mk mat width.get!, trailHeads)
+def parseInput (input : String) :=
+  StateT.run (m := Id) (s := #[])
+  $ Matrix.parseM! input fun (i, j) c => do
+    let h := Char.toUInt8 c - Char.toUInt8 '0'
+    if h == 0 then modify (·.push (i, j))
+    return h
 
 def dirs := [(-1o, 0), (0, -1o), (1, 0), (0, 1)]
 

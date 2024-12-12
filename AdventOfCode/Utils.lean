@@ -268,6 +268,33 @@ section Matrix
 
     def set! [Inhabited α] (mat : Matrix α) : Nat × Nat -> α -> Matrix α
     | (i, j), x => Matrix.mk (mat.array.set! (i * mat.width + j) x) mat.width
+
+    def parseM! {m : Type -> Type l} [Monad m]
+      (input : String) (f : (Nat × Nat) -> Char -> m α)
+    := do
+      let mut mat := Array.empty
+      let mut width := Option.none
+      let mut (i, j) := (0, 0)
+      for c in input.toSubstring do
+        match c with
+        | '\n' =>
+          match width with
+          | .some j' => if j != j' then panic!"illegal input"
+          | .none => width := .some j
+          i := i + 1
+          j := 0
+        | c =>
+          mat := mat.push (<- f (i, j) c)
+          j := j + 1
+      match width with
+      | .some j' =>
+        if j' != j then panic!"illegal input"
+        else return Matrix.mk mat j'
+      | .none =>
+        return Matrix.mk mat mat.size
+
+    def parse! (input : String) (f : (Nat × Nat) -> Char -> α) :=
+      Id.run $ parseM! (m := Id) input f
   end Matrix
 
 end Matrix

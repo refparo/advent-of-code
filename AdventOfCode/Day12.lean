@@ -6,20 +6,7 @@ namespace Day12
 
 open Std (HashMap Queue)
 
-def parseInput (input : String) := Id.run do
-  let mut mat := Array.empty
-  let mut width := Option.none
-  let mut (i, j) := (0, 0)
-  for c in input.toSubstring do
-    match c with
-    | '\n' =>
-      width := .some j
-      i := i + 1
-      j := 0
-    | c =>
-      mat := mat.push c
-      j := j + 1
-  Matrix.mk mat width.get!
+def parseInput := Matrix.parse! (f := fun _ c => c)
 
 def dirs := [(-1o, 0), (0, -1o), (1, 0), (0, 1)]
 

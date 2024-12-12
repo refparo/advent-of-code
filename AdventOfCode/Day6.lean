@@ -32,29 +32,17 @@ instance : ToString Tile where
   | path _ => "X"
   | obstruction => "#"
 
-def parseInput (input : String) := Id.run do
-  let mut mat := Array.empty
-  let mut width := Option.none
-  let mut guard := Option.none
-  let mut (i, j) := (0, 0)
-  for char in input.toSubstring do
-    match char with
-    | '.' =>
-      mat := mat.push space
-      j := j + 1
-    | '#' =>
-      mat := mat.push obstruction
-      j := j + 1
-    | '^' =>
-      guard := .some (i, j)
-      mat := mat.push space
-      j := j + 1
-    | '\n' =>
-      width := .some j
-      i := i + 1
-      j := 0
-    | _ => panic "invalid input"
-  (Matrix.mk mat width.get!, guard.get!)
+def parseInput (input : String) :=
+  let (mat, guard) := StateT.run (m := Id) (s := Option.none)
+    $ Matrix.parseM! input fun (i, j) c => do
+      match c with
+      | '.' => return space
+      | '#' => return obstruction
+      | '^' =>
+        StateT.set (.some (i, j))
+        return space
+      | _ => panic "invalid input"
+  (mat, guard.get!)
 
 def solvePart1 (mat : Matrix Tile) (guard : Nat × Nat) := Id.run do
   let mut mat := mat
