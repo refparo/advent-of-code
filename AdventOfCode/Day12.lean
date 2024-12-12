@@ -40,14 +40,14 @@ def joinSides
 :=
   let ((i, j), (di, dj)) := side
   let key := (di * i, dj * j)
-  match sides.get? key with
-  | .none => sides.insert key #[((i, j), (i, j))]
+  sides.alter key fun
+  | .none => #[((i, j), (i, j))]
   | .some arr =>
     let left := arr.find? fun ((i', j'), _) =>
       i'.offset i == 1 || j'.offset j == 1
     let right := arr.find? fun (_, (i', j')) =>
       i'.offset i == -1 || j'.offset j == -1
-    let arr := match (left, right) with
+    match (left, right) with
       | (.none, .none) => arr.push ((i, j), (i, j))
       | (.some left@(_, (i', j')), .none) =>
         arr.erase left |>.push ((i, j), (i', j'))
@@ -55,7 +55,6 @@ def joinSides
         arr.erase right |>.push ((i', j'), (i, j))
       | (.some left@(_, (i', j')), .some right@((i'', j''), _)) =>
         arr.erase left |>.erase right |>.push ((i'', j''), (i', j'))
-    sides.insert key arr
 
 def valuateWithDiscount
   (mat : Matrix Char)
