@@ -1,4 +1,4 @@
-import Std.Data.HashMap
+import Std.Data.HashSet
 
 import AdventOfCode.Utils
 
@@ -16,7 +16,7 @@ end Prod
 
 namespace Day6
 
-open Std (HashMap)
+open Std (HashSet)
 
 inductive Tile
 | space
@@ -44,11 +44,12 @@ def parseInput (input : String) :=
       | _ => panic "invalid input"
   (mat, guard.get!)
 
-def solvePart1 (mat : Matrix Tile) (guard : Nat × Nat) := Id.run do
+def walk (mat : Matrix Tile) (guard : Nat × Nat) := Id.run do
   let mut mat := mat
   let borders := ([:mat.height], [:mat.width]) + 1
   let mut pos := guard + 1n
   let mut dir : Offset × Offset := (-1, 0)
+  let mut turns := HashSet.empty
   let mut step := 0
   while pos ∈ borders do
     match mat[pos - 1n]! with
@@ -57,10 +58,23 @@ def solvePart1 (mat : Matrix Tile) (guard : Nat × Nat) := Id.run do
       step := step + 1
     | obstruction =>
       pos := pos - dir
+      if (pos, dir) ∈ turns
+      then return Option.none
+      else turns := turns.insert (pos, dir)
       dir := dir.turnRight
     | path _ => ()
     pos := pos + dir
-  (step, mat)
+  Option.some step
+
+def makeLoop (mat : Matrix Tile) (guard : Nat × Nat) :=
+  List.range mat.height
+  |>.map (
+    fun i => List.range mat.width
+    |>.countP (
+      fun j => mat[(i, j)]! == space && (walk (mat.set! (i, j) obstruction) guard).isNone
+    )
+  )
+  |>.sum
 
 def input := parseInput "\
 ..................#................................................................#........#.....................................
@@ -194,4 +208,11 @@ def input := parseInput "\
 ............................#...#........#......................................................................#.....#...........
 ............#..........##..................#.............................................................#.....#..#..............."
 
-#eval uncurry solvePart1 input |>.fst
+#eval uncurry walk input |>.get!
+-- #eval uncurry makeLoop input
+-- too slow
+
+end Day6
+
+def main := open Day6 in do
+  println!"{uncurry makeLoop input}"

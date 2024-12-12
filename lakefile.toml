@@ -9,6 +9,10 @@ name = "«segfault»"
 root = "AdventOfCode.Segfault"
 
 [[lean_exe]]
+name = "«day6»"
+root = "AdventOfCode.Day6"
+
+[[lean_exe]]
 name = "«day9»"
 root = "AdventOfCode.Day9"
 
