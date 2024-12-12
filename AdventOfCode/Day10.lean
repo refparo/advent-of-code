@@ -6,9 +6,9 @@ open Std (Queue)
 
 def parseInput (input : String) :=
   StateT.run (m := Id) (s := #[])
-  $ Matrix.parseM! input fun (i, j) c => do
+  $ Matrix.parseM! input fun pos c => do
     let h := Char.toUInt8 c - Char.toUInt8 '0'
-    if h == 0 then modify (·.push (i, j))
+    if h == 0 then modify (·.push pos)
     return h
 
 def dirs := [(-1o, 0), (0, -1o), (1, 0), (0, 1)]

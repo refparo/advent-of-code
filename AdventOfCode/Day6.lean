@@ -34,12 +34,12 @@ instance : ToString Tile where
 
 def parseInput (input : String) :=
   let (mat, guard) := StateT.run (m := Id) (s := Option.none)
-    $ Matrix.parseM! input fun (i, j) c => do
+    $ Matrix.parseM! input fun pos c => do
       match c with
       | '.' => return space
       | '#' => return obstruction
       | '^' =>
-        StateT.set (.some (i, j))
+        StateT.set (.some pos)
         return space
       | _ => panic "invalid input"
   (mat, guard.get!)
