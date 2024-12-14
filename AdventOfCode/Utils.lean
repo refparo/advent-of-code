@@ -87,6 +87,10 @@ section Prod
   : HSub (α1 × α2) (β1 × β2) (γ1 × γ2) where
     hSub := fun (a1, a2) (b1, b2) => (a1 - b1, a2 - b2)
 
+  instance [HMod α1 β1 γ1] [HMod α2 β2 γ2]
+  : HMod (α1 × α2) (β1 × β2) (γ1 × γ2) where
+    hMod := fun (a1, a2) (b1, b2) => (a1 % b1, a2 % b2)
+
   instance [HAdd α1 β γ1] [HAdd α2 β γ2]
   : HAdd (α1 × α2) β (γ1 × γ2) where
     hAdd := fun (a1, a2) b => (a1 + b, a2 + b)
@@ -94,6 +98,14 @@ section Prod
   instance [HSub α1 β γ1] [HSub α2 β γ2]
   : HSub (α1 × α2) β (γ1 × γ2) where
     hSub := fun (a1, a2) b => (a1 - b, a2 - b)
+
+  instance [HMul α1 β γ1] [HMul α2 β γ2]
+  : HMul (α1 × α2) β (γ1 × γ2) where
+    hMul := fun (a1, a2) b => (a1 * b, a2 * b)
+
+  instance [HDiv α1 β γ1] [HDiv α2 β γ2]
+  : HDiv (α1 × α2) β (γ1 × γ2) where
+    hDiv := fun (a1, a2) b => (a1 / b, a2 / b)
 
   instance [Membership α1 γ1] [Membership α2 γ2]
   : Membership (α1 × α2) (γ1 × γ2) where

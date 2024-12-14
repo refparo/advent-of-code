@@ -16,6 +16,10 @@ root = "AdventOfCode.Day6"
 name = "«day9»"
 root = "AdventOfCode.Day9"
 
+[[lean_exe]]
+name = "«day14»"
+root = "AdventOfCode.Day14"
+
 [[require]]
 name = "Parser"
 scope = "fgdorais"
