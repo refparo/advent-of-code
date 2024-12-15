@@ -279,7 +279,12 @@ section Matrix
     def bounds (mat : Matrix α) := ([:mat.height], [:mat.width])
 
     def set! [Inhabited α] (mat : Matrix α) : Nat × Nat -> α -> Matrix α
-    | (i, j), x => Matrix.mk (mat.array.set! (i * mat.width + j) x) mat.width
+    | (i, j), x => { mat with array := mat.array.set! (i * mat.width + j) x }
+
+    def swap! (mat : Matrix α) : Nat × Nat -> Nat × Nat -> Matrix α
+    | (i, j), (i', j') => { mat with
+      array := mat.array.swap! (i * mat.width + j) (i' * mat.width + j')
+    }
 
     def parseM! {m : Type -> Type l} [Monad m]
       (input : String) (f : (Nat × Nat) -> Char -> m α)
