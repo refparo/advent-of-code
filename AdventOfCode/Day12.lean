@@ -13,7 +13,7 @@ def dirs := [(-1o, 0), (0, -1o), (1, 0), (0, 1)]
 def valuateRegion
   (mat : Matrix Char)
   (start : Nat × Nat)
-  (done : Matrix Bool := Matrix.mk (Array.mkArray mat.array.size false) mat.width)
+  (done : Matrix Bool := { mat with array := Array.mkArray mat.array.size false })
 := Id.run do
   let bounds := mat.bounds + 1n
   let mut done := done
@@ -59,7 +59,7 @@ def joinSides
 def valuateWithDiscount
   (mat : Matrix Char)
   (start : Nat × Nat)
-  (done : Matrix Bool := Matrix.mk (Array.mkArray mat.array.size false) mat.width)
+  (done : Matrix Bool := { mat with array := Array.mkArray mat.array.size false })
 := Id.run do
   let bounds := mat.bounds + 1n
   let mut done := done
@@ -84,7 +84,7 @@ def valuateAll
   (evaluateRegion : Matrix Char -> Nat × Nat -> Matrix Bool -> Nat × Matrix Bool)
   (mat : Matrix Char)
 := Id.run do
-  let mut done := Matrix.mk (Array.mkArray mat.array.size false) mat.width
+  let mut done := { mat with array := Array.mkArray mat.array.size false }
   let mut total := 0
   repeat do
     let .some i := done.array.findIdx? (!·) | break

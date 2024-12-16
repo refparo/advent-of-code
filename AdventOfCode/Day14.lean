@@ -39,10 +39,11 @@ def showGrid
   (room : Int × Int := (101, 103))
 :=
   let grid := robots.foldl
-    (init := Matrix.mk
-      (Array.mkArray (room.fst * room.snd |>.toNat) false)
-      room.fst.toNat
-    )
+    (init := {
+      array := Array.mkArray (room.fst * room.snd |>.toNat) false
+      width := room.fst.toNat
+      : Matrix _
+    })
     fun grid (x, y) => grid.set! (x.toNat, y.toNat) true
   (0, room.snd.toNat).foldI (a := "") fun j str =>
     (·.push '\n') $ (0, room.fst.toNat).foldI (a := str) fun i str =>
