@@ -2,18 +2,6 @@ import Std.Data.HashSet
 
 import AdventOfCode.Utils
 
-namespace Prod
-
-  @[inline]
-  def turnRight : Offset × Offset -> Offset × Offset
-  | (di, dj) => (dj, -di)
-
-  @[inline]
-  def turnLeft : Offset × Offset -> Offset × Offset
-  | (di, dj) => (-dj, di)
-
-end Prod
-
 namespace Day6
 
 open Std (HashSet)

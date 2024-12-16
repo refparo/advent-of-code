@@ -77,6 +77,22 @@ section Offset
 
 end Offset
 
+namespace Prod
+
+  @[inline]
+  def turnRight : Offset × Offset -> Offset × Offset
+  | (di, dj) => (dj, -di)
+
+  @[inline]
+  def turnLeft : Offset × Offset -> Offset × Offset
+  | (di, dj) => (-dj, di)
+
+  @[inline]
+  def dot : Offset × Offset -> Offset × Offset -> Int
+  | (.ofInt i, .ofInt j), (.ofInt i', .ofInt j') => i * i' + j * j'
+
+end Prod
+
 section Prod
 
   instance [HAdd α1 β1 γ1] [HAdd α2 β2 γ2]
