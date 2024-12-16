@@ -194,7 +194,7 @@ namespace StreamRange
     forIn x b f := do
       let mut i := x.start
       let mut b := b
-      while true do
+      repeat do
         match (<- f i b) with
         | .yield b' => do
           b := b'

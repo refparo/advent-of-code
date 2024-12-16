@@ -17,7 +17,7 @@ def score (mat : Matrix UInt8) (trailHead : Nat × Nat) : Nat := Id.run do
   let mut done := Matrix.mk (Array.mkArray mat.array.size false) mat.width
   let mut todo := Queue.empty.enqueue (trailHead + 1n)
   let mut score := 0
-  while true do
+  repeat do
     let .some (pos, rest) := todo.dequeue? | break
     todo := rest
     if done[pos - 1n]! then continue

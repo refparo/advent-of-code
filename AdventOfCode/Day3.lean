@@ -14,7 +14,7 @@ def solve (useDoDont : Bool) (input : String) :=
 where parser : StringParser Nat := do
   let mut dont := false
   let mut result := 0
-  while true do
+  repeat do
     if useDoDont then
       try
         _ <- string "do()"

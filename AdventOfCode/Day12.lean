@@ -21,7 +21,7 @@ def valuateRegion
   let plant := mat[start]!
   let mut area := 0
   let mut perimeter := 0
-  while true do
+  repeat do
     let .some (pos, rest) := todo.dequeue? | break
     todo := rest
     if pos ∈ bounds && mat[pos - 1n]! == plant then
@@ -67,7 +67,7 @@ def valuateWithDiscount
   let plant := mat[start]!
   let mut area := 0
   let mut sides := HashMap.empty
-  while true do
+  repeat do
     let .some ((pos, dir), rest) := todo.dequeue? | break
     todo := rest
     if pos ∈ bounds && mat[pos - 1n]! == plant then
@@ -86,7 +86,7 @@ def valuateAll
 := Id.run do
   let mut done := Matrix.mk (Array.mkArray mat.array.size false) mat.width
   let mut total := 0
-  while true do
+  repeat do
     let .some i := done.array.findIdx? (!·) | break
     let start := (i / done.width, i % done.width)
     let (price, newDone) := evaluateRegion mat start done
