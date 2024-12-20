@@ -11,8 +11,6 @@ def parseInput (input : String) :=
     if h == 0 then modify (·.push pos)
     return h
 
-def dirs := [(-1o, 0), (0, -1o), (1, 0), (0, 1)]
-
 def score (mat : Matrix UInt8) (trailHead : Nat × Nat) : Nat := Id.run do
   let mut done := { mat with array := Array.mkArray mat.array.size false }
   let mut todo := Queue.empty.enqueue (trailHead + 1n)

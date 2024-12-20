@@ -75,6 +75,16 @@ section Offset
 
   end Offset
 
+  syntax num &"n" : term
+  syntax num &"i" : term
+  syntax num &"o" : term
+  syntax num &"u" : term
+  macro_rules
+  | `($n:num n) => `(($n : Nat))
+  | `($n:num i) => `(($n : Int))
+  | `($n:num o) => `(($n : Offset))
+  | `($n:num u) => `(($n : USize))
+
 end Offset
 
 namespace Prod
@@ -134,6 +144,8 @@ section Prod
   : Decidable (pair ∈ coll) := by
     simp only [Membership.mem]
     infer_instance
+
+  def dirs := [(-1o, 0), (0, -1o), (1, 0), (0, 1)]
 
 end Prod
 
@@ -331,13 +343,3 @@ section Matrix
   end Matrix
 
 end Matrix
-
-syntax num &"n" : term
-syntax num &"i" : term
-syntax num &"o" : term
-syntax num &"u" : term
-macro_rules
-| `($n:num n) => `(($n : Nat))
-| `($n:num i) => `(($n : Int))
-| `($n:num o) => `(($n : Offset))
-| `($n:num u) => `(($n : USize))

@@ -21,8 +21,6 @@ def parseInput (input : String) (size : Nat := 71) := Id.run do
     else panic!"illegal input"
   mat
 
-def dirs := [(-1o, 0), (0, -1o), (1, 0), (0, 1)]
-
 def findPath [Inhabited α] (mat : Matrix α) (p : α -> Bool)
   (start : Nat × Nat) (stop : Nat × Nat)
 := Id.run do

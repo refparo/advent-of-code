@@ -8,8 +8,6 @@ open Std (HashMap Queue)
 
 def parseInput := Matrix.parse! (f := fun _ c => c)
 
-def dirs := [(-1o, 0), (0, -1o), (1, 0), (0, 1)]
-
 def valuateRegion
   (mat : Matrix Char)
   (start : Nat × Nat)

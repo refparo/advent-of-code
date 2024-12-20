@@ -25,8 +25,6 @@ def parseInput (input : String) :=
         | _ => panic!"illegal input"
   (mat, start.get!, stop.get!)
 
-def dirs := [(-1o, 0), (0, -1o), (1, 0), (0, 1)]
-
 def turnScore (dir dir' : Offset × Offset) :=
   match dir.dot dir' with
   | 1 => 0
