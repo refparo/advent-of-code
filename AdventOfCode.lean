@@ -17,4 +17,5 @@ import AdventOfCode.Day16
 import AdventOfCode.Day17
 import AdventOfCode.Day18
 import AdventOfCode.Day19
+import AdventOfCode.Day20
 import AdventOfCode.Utils
