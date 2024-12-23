@@ -7,7 +7,7 @@ inductive Tile where
 deriving Inhabited, BEq
 
 instance : ToString Tile where
-  toString := fun
+  toString
   | .wall => "#"
   | .space => "."
   | .box => "O"

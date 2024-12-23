@@ -15,7 +15,7 @@ deriving Inhabited, BEq
 open Tile
 
 instance : ToString Tile where
-  toString := fun
+  toString
   | space => "."
   | path _ => "X"
   | obstruction => "#"

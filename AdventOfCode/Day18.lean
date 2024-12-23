@@ -5,7 +5,7 @@ namespace Day18
 open Std (Queue)
 
 instance : ToString Bool where
-  toString := fun
+  toString
   | true => "#"
   | false => "."
 
