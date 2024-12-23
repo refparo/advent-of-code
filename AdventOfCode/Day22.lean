@@ -32,9 +32,7 @@ def findBestSeqs (init : Nat) :=
 def solvePart2 (input : List Nat) :=
   let prices := input.foldl (init := HashMap.empty) fun acc init =>
     findBestSeqs init |>.fold (init := acc) fun acc seq price =>
-      acc.alter seq fun
-      | .some price' => .some $ price' + price
-      | .none => .some price
+      acc.alter seq (.some $ ·.getD 0 + price)
   prices.fold (init := 0) fun best _ price => max best price
 
 def input := parseInput "\

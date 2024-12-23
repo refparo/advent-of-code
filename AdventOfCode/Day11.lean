@@ -24,7 +24,7 @@ def blinkCounts (counts : HashMap Nat Nat) := Id.run do
   let mut result := HashMap.empty
   for (x, n) in counts do
     for y in blink x do
-      result := result.alter y fun opt => .some $ n + opt.getD 0
+      result := result.alter y (.some $ ·.getD 0 + n)
   result
 
 def solvePart2 (stones : List Nat) (n : Nat := 75) : HashMap Nat Nat :=

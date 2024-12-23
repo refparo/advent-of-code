@@ -13,8 +13,7 @@ def parseInput (input : String) :=
     $ Matrix.parseM! input fun pos c =>
       if c != '.' then
         modify fun freqs =>
-          freqs.alter c fun antennas =>
-            .some $ (antennas.getD #[]).push pos
+          freqs.alter c (.some $ ·.getD #[] |>.push pos)
       else pure ()
   (result, mat.bounds)
 

@@ -25,7 +25,7 @@ def solvePart1 (left right : List Nat) :=
 def solvePart2 (left right : List Nat) := Id.run do
   let mut dict := HashMap.empty
   for x in right do
-    dict := dict.alter x fun opt => .some $ 1 + opt.getD 0
+    dict := dict.alter x (.some $ ·.getD 0 + 1)
   return List.sum $ left.map fun x =>
     x * dict[x]?.getD 0
 
