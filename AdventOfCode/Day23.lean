@@ -26,10 +26,7 @@ def countTriangles (input : HashMap String (Array String)) :=
           (if c.startsWith "t" then 1 else 0)
         )
 
--- this actually terminates, but Lean prevents me from proving it.
--- inlining `go` into `findMaximumClique` would make proving termination
--- possible, but that would make the code very ugly.
-partial def findLanParty (input : HashMap String (Array String)) :=
+def findLanParty (input : HashMap String (Array String)) :=
   findMaximumClique input.keys [] 0 |>.fst.mergeSort |> ",".intercalate
 where
   -- this is an implementation of Bron–Kerbosch algorithm
@@ -39,10 +36,16 @@ where
       match candidates with
       | [] => (best, bestLen)
       | x :: rest =>
+        have : (rest.filter input[x]!.contains).length < rest.length + 1 := by
+          apply Nat.lt_of_le_of_lt
+          apply List.length_filter_le
+          decreasing_trivial
         let (xs, len) := findMaximumClique
           (rest.filter input[x]!.contains) (x :: xs) (len + 1)
         if len > bestLen then go rest xs len else go rest best bestLen
+      termination_by (candidates.length, 0)
     go candidates [] 0
+  termination_by (candidates.length, 1)
 
 def input := parseInput "\
 tg-ub
